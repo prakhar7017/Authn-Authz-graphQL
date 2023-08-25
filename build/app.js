@@ -13,34 +13,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const server_1 = require("@apollo/server");
+// import { ApolloServer } from "@apollo/server";
 const express4_1 = require("@apollo/server/express4");
+// import { prismaClient } from "./lib/db";
+const index_1 = __importDefault(require("./graphQl/index"));
 //creating server
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = (0, express_1.default)();
         const PORT = process.env.PORT || 8000;
         app.use(express_1.default.json());
-        const graphQlServer = new server_1.ApolloServer({
-            typeDefs: `
-            type Query {
-                hello: String 
-            }
-        `,
-            resolvers: {
-                Query: {
-                    hello: () => `hello i am graphql`
-                }
-            }, //actual functions
-        });
-        yield graphQlServer.start();
         app.get("/", (req, res) => {
             res.status(200).json({
                 success: true,
-                message: "Backend is Up"
+                message: "Backend is Up",
             });
         });
-        app.use("/graphql", (0, express4_1.expressMiddleware)(graphQlServer));
+        app.use("/graphql", (0, express4_1.expressMiddleware)(yield (0, index_1.default)()));
         app.listen(PORT, () => {
             console.log(`Server has Started at ${PORT}`);
         });

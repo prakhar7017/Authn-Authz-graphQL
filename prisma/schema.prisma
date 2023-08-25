@@ -14,7 +14,7 @@ model User { // User is model name with below properties
   id String @id @default(uuid())
   firstName String @map("first_name") //code -> database
   lastName String @map("last_name")
-  profileImageUrl String? @map("profile_image_url")
+  profileImageUrl String? @map("profile_image_url") // optional fields
   email String @unique
   password String
   salt String 
