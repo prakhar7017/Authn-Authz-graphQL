@@ -1,1 +1,7 @@
-export const resolvers=`#graphql`
+const queries={};
+
+const mutations={}
+
+
+
+export const resolvers={queries,mutations};
