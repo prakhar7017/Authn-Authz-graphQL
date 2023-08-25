@@ -7,9 +7,19 @@ async function init(){
     const app=express();
     const PORT=process.env.PORT || 8000 ;
 
+    app.use(express.json());
+
     const graphQlServer=new ApolloServer({
-        typeDefs:'',
-        resolvers:{},
+        typeDefs:`
+            type Query {
+                hello: String 
+            }
+        `, //schema
+        resolvers:{
+            Query :{
+                hello:()=>`hello i am graphql`
+            }
+        }, //actual functions
     })
 
     await graphQlServer.start();
@@ -20,6 +30,8 @@ async function init(){
             message:"Backend is Up"
         })
     })
+
+    app.use("/graphql",expressMiddleware(graphQlServer))
     
     app.listen(PORT,()=>{
         console.log(`Server has Started at ${PORT}`);
