@@ -17,19 +17,37 @@ const express_1 = __importDefault(require("express"));
 const express4_1 = require("@apollo/server/express4");
 // import { prismaClient } from "./lib/db";
 const index_1 = __importDefault(require("./graphQl/index"));
+const user_1 = __importDefault(require("./Services/user"));
+const cors_1 = __importDefault(require("cors"));
 //creating server
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = (0, express_1.default)();
         const PORT = process.env.PORT || 8000;
         app.use(express_1.default.json());
+        app.use((0, cors_1.default)());
         app.get("/", (req, res) => {
             res.status(200).json({
                 success: true,
                 message: "Backend is Up",
             });
         });
-        app.use("/graphql", (0, express4_1.expressMiddleware)(yield (0, index_1.default)()));
+        app.use("/graphql", (0, express4_1.expressMiddleware)(yield (0, index_1.default)(), {
+            context: ({ req }) => __awaiter(this, void 0, void 0, function* () {
+                // @ts-ignore 
+                const token = req.headers["token"];
+                console.log(token);
+                try {
+                    console.log("going to decode");
+                    const user = yield user_1.default.decodeJwtToken(token);
+                    console.log("passed from app.js");
+                    return { user };
+                }
+                catch (error) {
+                    return {};
+                }
+            })
+        }));
         app.listen(PORT, () => {
             console.log(`Server has Started at ${PORT}`);
         });

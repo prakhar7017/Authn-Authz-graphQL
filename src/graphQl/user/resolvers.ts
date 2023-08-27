@@ -1,6 +1,6 @@
 import UserService, {CreateUserPayload} from "../../Services/user"
 import { CreateUserToken } from "../../Services/user"
-import jwt from "jsonwebtoken"
+
 
 const queries={
     getUserToken:async(_:any,paylaod:CreateUserToken)=>{
@@ -10,6 +10,16 @@ const queries={
         })
 
         return token;
+    },
+    getCurrentLoggedInUser:async (_:any,parameters:any,context:any)=>{
+        console.log(context);
+        if(context && context.user){
+            const id= context.user.id
+            const user=await UserService.getUserById(id);
+            return user
+        }
+        throw new Error("Cannot find Context")
+
     }
 };
 

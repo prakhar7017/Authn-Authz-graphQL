@@ -1,8 +1,7 @@
-import { errorMonitor } from "node:events";
 import { prismaClient } from "../lib/db"
 import {createHmac,randomBytes} from "node:crypto"
-import jwt from "jsonwebtoken"
-const jwt_secret='prakharmaheshwari'
+import JWT from "jsonwebtoken";
+const jwt_secret='prakharmaheshwariypyo'
 
 export interface CreateUserPayload{
     firstName:string;
@@ -61,9 +60,19 @@ class UserService {
             throw new Error("Password is incorrect");
         }
 
-        const token=jwt.sign({id:user.id,email:user.email},jwt_secret)
+        const token=JWT.sign({id:user.id,email:user.email},jwt_secret)
 
         return token;
+    }
+
+    public static async decodeJwtToken(token:string){
+        const decdedtoken=await JWT.verify(token,jwt_secret);
+        console.log(decdedtoken);
+        return decdedtoken;    
+    }
+
+    public static getUserById(id:string){
+        return prismaClient.user.findUnique({where:{id:id}})
     }
 }
 

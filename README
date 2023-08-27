@@ -1,0 +1,5 @@
+Run command to install required packages 
+npm install 
+
+Run command to start the Server
+npm run dev
