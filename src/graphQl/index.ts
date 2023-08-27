@@ -5,7 +5,7 @@ export default async function createApolloServer(){
     const graphQlServer = new ApolloServer({
         typeDefs: `
                 type Query { 
-                    ${User.queries}
+                    hello:String
 
                 }
                 type Mutation {
@@ -15,11 +15,11 @@ export default async function createApolloServer(){
             `, //schema
         resolvers: {
           Query: {
-            // ...User.resolvers.queries
+            ...User.resolvers.queries
             
           },
           Mutation :{
-            // ...User.resolvers.mutations
+            ...User.resolvers.mutations
           }
         }, //actual functions
       });
